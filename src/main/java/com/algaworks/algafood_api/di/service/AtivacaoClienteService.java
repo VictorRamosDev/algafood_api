@@ -15,10 +15,6 @@ import javax.annotation.PreDestroy;
 @Service
 public class AtivacaoClienteService {
 
-//    @TipoDoNotificador(NivelUrgencia.SEM_URGENCIA)
-//    @Autowired(required = false)
-//    private Notificador notificador;
-
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
@@ -36,11 +32,5 @@ public class AtivacaoClienteService {
         cliente.ativar();
 
         applicationEventPublisher.publishEvent(new ClienteAtivadoEvent(cliente));
-
-//        if (notificador != null) {
-//                notificador.notificar(cliente, "Cliente ativado!");
-//        } else {
-//            System.out.println("Não existe notificador, mas cliente foi ativado!");
-//        }
     }
 }
