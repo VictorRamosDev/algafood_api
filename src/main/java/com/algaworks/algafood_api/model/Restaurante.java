@@ -14,7 +14,7 @@ public class Restaurante {
 
     private String nome;
 
-    @Column(name = "taxa_frete")
+    @Column(name = "taxa_frete") //Opcional: Se o nome do atributo de classe for o mesmo da coluna da tabela
     private BigDecimal taxaFrete;
 
     public Long getId() {
