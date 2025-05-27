@@ -25,4 +25,7 @@ public class Restaurante {
     @Column(name = "taxa_frete") //Opcional: Se o nome do atributo de classe for o mesmo da coluna da tabela
     private BigDecimal taxaFrete;
 
+    @ManyToOne
+    private Cozinha cozinha;
+
 }

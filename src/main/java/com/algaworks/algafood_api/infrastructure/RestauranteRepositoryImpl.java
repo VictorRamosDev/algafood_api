@@ -1,4 +1,4 @@
-package com.algaworks.algafood_api.jpa;
+package com.algaworks.algafood_api.infrastructure;
 
 import com.algaworks.algafood_api.model.Restaurante;
 import com.algaworks.algafood_api.repository.RestauranteRepository;
