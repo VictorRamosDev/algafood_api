@@ -9,3 +9,11 @@ insert into forma_pagamento(descricao) values ("Dinheiro");
 insert into forma_pagamento(descricao) values ("Crédito");
 insert into forma_pagamento(descricao) values ("Débito");
 insert into forma_pagamento(descricao) values ("Pix");
+
+insert into estado (nome) values ("Paraíba");
+insert into estado (nome) values ("Rio Grande do Norte");
+insert into estado (nome) values ("Pernambuco");
+insert into estado (nome) values ("Ceará");
+insert into estado (nome) values ("Piauí");
+insert into estado (nome) values ("Maranhão");
+insert into estado (nome) values ("Alagoas");
