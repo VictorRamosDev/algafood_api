@@ -33,20 +33,11 @@ public class CozinhaController {
     public ResponseEntity<Cozinha> buscar(@PathVariable("cozinhaId") Long id) {
         Cozinha cozinha = repository.buscar(id);
 
-        HttpHeaders headers = new HttpHeaders();
-        if (cozinha == null) {
-            headers.add(HttpHeaders.LOCATION, "http://api.algafood.local:8082/cozinhas");
-        } else {
-            headers.add("body", cozinha.getNome());
+        if (cozinha != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(cozinha);
         }
 
-        ResponseEntity<Cozinha> response = ResponseEntity
-                .status(HttpStatus.FOUND)
-                .headers(headers)
-                .build();
-        return response;
-
-//        return repository.buscar(id);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 }
