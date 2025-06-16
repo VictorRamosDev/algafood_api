@@ -3,6 +3,7 @@ package com.algaworks.algafood_api.api;
 import com.algaworks.algafood_api.model.Cozinha;
 import com.algaworks.algafood_api.model.CozinhasXmlWrapper;
 import com.algaworks.algafood_api.repository.CozinhaRepository;
+import com.algaworks.algafood_api.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,8 +16,15 @@ import java.util.List;
 @RequestMapping(value = "/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CozinhaController {
 
+    private final CozinhaRepository repository;
+
+    private final CadastroCozinhaService cadastroCozinhaService;
+
     @Autowired
-    private CozinhaRepository repository;
+    public CozinhaController(CozinhaRepository cozinhaRepository, CadastroCozinhaService cadastroCozinhaService) {
+        this.repository = cozinhaRepository;
+        this.cadastroCozinhaService = cadastroCozinhaService;
+    }
 
     @GetMapping
     public List<Cozinha> listarJson() {
@@ -39,10 +47,10 @@ public class CozinhaController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_XML_VALUE)
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Cozinha salvar(@RequestBody Cozinha cozinha) {
-        return repository.salvar(cozinha);
+        return cadastroCozinhaService.salvar(cozinha);
     }
 
     @PutMapping("/{cozinhaId}")
