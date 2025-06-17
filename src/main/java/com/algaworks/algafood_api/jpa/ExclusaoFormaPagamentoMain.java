@@ -1,9 +1,8 @@
 package com.algaworks.algafood_api.jpa;
 
 import com.algaworks.algafood_api.AlgafoodApiApplication;
-import com.algaworks.algafood_api.infrastructure.FormaPagamentoRepositoryImpl;
-import com.algaworks.algafood_api.model.FormaPagamento;
-import com.algaworks.algafood_api.repository.FormaPagamentoRepository;
+import com.algaworks.algafood_api.domain.model.FormaPagamento;
+import com.algaworks.algafood_api.domain.repository.FormaPagamentoRepository;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;

@@ -1,6 +1,6 @@
-package com.algaworks.algafood_api.repository;
+package com.algaworks.algafood_api.domain.repository;
 
-import com.algaworks.algafood_api.model.Estado;
+import com.algaworks.algafood_api.domain.model.Estado;
 
 import java.util.List;
 

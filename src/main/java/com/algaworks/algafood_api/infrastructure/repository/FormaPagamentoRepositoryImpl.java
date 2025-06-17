@@ -1,7 +1,7 @@
-package com.algaworks.algafood_api.infrastructure;
+package com.algaworks.algafood_api.infrastructure.repository;
 
-import com.algaworks.algafood_api.model.FormaPagamento;
-import com.algaworks.algafood_api.repository.FormaPagamentoRepository;
+import com.algaworks.algafood_api.domain.model.FormaPagamento;
+import com.algaworks.algafood_api.domain.repository.FormaPagamentoRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

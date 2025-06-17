@@ -1,6 +1,6 @@
-package com.algaworks.algafood_api.repository;
+package com.algaworks.algafood_api.domain.repository;
 
-import com.algaworks.algafood_api.model.Restaurante;
+import com.algaworks.algafood_api.domain.model.Restaurante;
 
 import java.util.List;
 

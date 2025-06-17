@@ -1,7 +1,7 @@
-package com.algaworks.algafood_api.infrastructure;
+package com.algaworks.algafood_api.infrastructure.repository;
 
-import com.algaworks.algafood_api.model.Restaurante;
-import com.algaworks.algafood_api.repository.RestauranteRepository;
+import com.algaworks.algafood_api.domain.model.Restaurante;
+import com.algaworks.algafood_api.domain.repository.RestauranteRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
