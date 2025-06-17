@@ -3,7 +3,6 @@ package com.algaworks.algafood_api.api;
 import com.algaworks.algafood_api.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood_api.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood_api.domain.model.Cozinha;
-import com.algaworks.algafood_api.domain.model.CozinhasXmlWrapper;
 import com.algaworks.algafood_api.domain.repository.CozinhaRepository;
 import com.algaworks.algafood_api.domain.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
@@ -31,12 +30,6 @@ public class CozinhaController {
     @ResponseStatus(HttpStatus.OK)
     public List<Cozinha> listarJson() {
         return repository.listar();
-    }
-
-    @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public CozinhasXmlWrapper listarXml() {
-        return new CozinhasXmlWrapper(repository.listar());
     }
 
     @GetMapping("/{cozinhaId}")
