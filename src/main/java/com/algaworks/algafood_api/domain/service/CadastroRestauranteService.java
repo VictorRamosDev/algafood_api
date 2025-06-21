@@ -1,5 +1,6 @@
 package com.algaworks.algafood_api.domain.service;
 
+import com.algaworks.algafood_api.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood_api.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood_api.domain.model.Cozinha;
 import com.algaworks.algafood_api.domain.model.Restaurante;
@@ -7,6 +8,8 @@ import com.algaworks.algafood_api.domain.repository.CozinhaRepository;
 import com.algaworks.algafood_api.domain.repository.RestauranteRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +36,6 @@ public class CadastroRestauranteService {
         return restauranteRepository.salvar(restaurante);
     }
 
-    @Transactional
     public Restaurante atualizar(Long restauranteId, Restaurante restaurante) {
         Restaurante restauranteEntity = restauranteRepository.buscar(restauranteId);
 
@@ -48,5 +50,13 @@ public class CadastroRestauranteService {
 
         BeanUtils.copyProperties(restaurante, restauranteEntity, "id");
         return restauranteRepository.salvar(restauranteEntity);
+    }
+
+    public void remover(Long restauranteId) {
+        try {
+            restauranteRepository.remover(restauranteId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntidadeNaoEncontradaException(String.format("O restaurante de código %d não foi encontrado.", restauranteId));
+        }
     }
 }

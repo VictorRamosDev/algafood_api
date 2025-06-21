@@ -66,6 +66,16 @@ public class RestauranteController {
             Restaurante restauranteAtualizado = cadastroRestauranteService.atualizar(restauranteId, restaurante);
             return ResponseEntity.ok(restauranteAtualizado);
         } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{restauranteId}")
+    public ResponseEntity<?> remover(@PathVariable Long restauranteId) {
+        try {
+            cadastroRestauranteService.remover(restauranteId);
+            return ResponseEntity.noContent().build();
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
