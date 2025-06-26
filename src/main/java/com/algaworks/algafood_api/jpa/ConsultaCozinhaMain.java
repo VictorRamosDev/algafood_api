@@ -23,5 +23,9 @@ public class ConsultaCozinhaMain {
         for (Cozinha cozinha : cozinhas) {
             System.out.println(cozinha);
         }
+
+        List<Cozinha> list = cozinhaRepository.consultarPorNome("Tailandesa");
+        System.out.println("Lista consultada por nome (Tailandesa):");
+        System.out.println(list);
     }
 }

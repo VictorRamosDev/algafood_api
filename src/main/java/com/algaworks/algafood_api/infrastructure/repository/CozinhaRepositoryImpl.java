@@ -43,4 +43,12 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
         }
         manager.remove(cozinha);
     }
+
+    @Override
+    public List<Cozinha> consultarPorNome(String nome) {
+        return manager.createQuery("from Cozinha where nome like :nome", Cozinha.class)
+                .setParameter("nome", "%" + nome + "%")
+                .getResultList();
+    }
+
 }
