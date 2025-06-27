@@ -1,6 +1,5 @@
 package com.algaworks.algafood_api.domain.service;
 
-import com.algaworks.algafood_api.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood_api.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood_api.domain.model.Cozinha;
 import com.algaworks.algafood_api.domain.model.Restaurante;
@@ -8,10 +7,10 @@ import com.algaworks.algafood_api.domain.repository.CozinhaRepository;
 import com.algaworks.algafood_api.domain.repository.RestauranteRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class CadastroRestauranteService {
@@ -28,10 +27,9 @@ public class CadastroRestauranteService {
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
 
-        Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
-        if (cozinha == null) {
-            throw new EntidadeNaoEncontradaException(String.format("Não existe cadastro de cozinha de código %d.", cozinhaId));
-        }
+        Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Não existe cadastro de cozinha de código %d.", cozinhaId)));
+        restaurante.setCozinha(cozinha);
 
         return restauranteRepository.salvar(restaurante);
     }
@@ -43,8 +41,8 @@ public class CadastroRestauranteService {
             throw new EntidadeNaoEncontradaException(String.format("O restaurante de código %d não foi encontrado.", restauranteId));
         }
 
-        Cozinha cozinha = cozinhaRepository.buscar(restaurante.getCozinha().getId());
-        if (cozinha == null) {
+        Optional<Cozinha> cozinha = cozinhaRepository.findById(restaurante.getCozinha().getId());
+        if (cozinha.isEmpty()) {
             throw new EntidadeNaoEncontradaException(String.format("A cozinha de código %d não existe no sistema.", restaurante.getCozinha().getId()));
         }
 

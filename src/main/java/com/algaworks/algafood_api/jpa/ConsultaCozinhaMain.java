@@ -19,12 +19,12 @@ public class ConsultaCozinhaMain {
 
         CozinhaRepository cozinhaRepository = configurableApplicationContext.getBean(CozinhaRepository.class);
 
-        List<Cozinha> cozinhas = cozinhaRepository.listar();
+        List<Cozinha> cozinhas = cozinhaRepository.findAll();
         for (Cozinha cozinha : cozinhas) {
             System.out.println(cozinha);
         }
 
-        List<Cozinha> list = cozinhaRepository.consultarPorNome("Tailandesa");
+        List<Cozinha> list = cozinhaRepository.findByNome("Tailandesa");
         System.out.println("Lista consultada por nome (Tailandesa):");
         System.out.println(list);
     }

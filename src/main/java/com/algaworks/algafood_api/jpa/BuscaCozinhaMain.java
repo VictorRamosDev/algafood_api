@@ -7,6 +7,8 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.util.Optional;
+
 public class BuscaCozinhaMain {
 
     public static void main(String[] args) {
@@ -17,8 +19,8 @@ public class BuscaCozinhaMain {
 
         CozinhaRepository cozinhaRepository = configurableApplicationContext.getBean(CozinhaRepository.class);
 
-        Cozinha cozinha = cozinhaRepository.buscar(1L);
+        Optional<Cozinha> cozinha = cozinhaRepository.findById(1L);
 
-        System.out.println(cozinha);
+        System.out.println(cozinha.get());
     }
 }
