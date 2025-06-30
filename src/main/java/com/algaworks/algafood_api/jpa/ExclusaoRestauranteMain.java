@@ -1,7 +1,6 @@
 package com.algaworks.algafood_api.jpa;
 
 import com.algaworks.algafood_api.AlgafoodApiApplication;
-import com.algaworks.algafood_api.domain.model.Restaurante;
 import com.algaworks.algafood_api.domain.repository.RestauranteRepository;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -15,7 +14,7 @@ public class ExclusaoRestauranteMain {
                 .run(args);
 
         RestauranteRepository restauranteRepository = applicationContext.getBean(RestauranteRepository.class);
-        restauranteRepository.remover(1L);
+        restauranteRepository.deleteById(1L);
     }
 
 }

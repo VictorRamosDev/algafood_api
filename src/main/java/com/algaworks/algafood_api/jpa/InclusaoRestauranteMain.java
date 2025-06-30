@@ -23,7 +23,7 @@ public class InclusaoRestauranteMain {
         restaurante1.setNome("Nau");
         restaurante1.setTaxaFrete(BigDecimal.valueOf(20));
 
-        restaurante1 = restauranteRepository.salvar(restaurante1);
+        restaurante1 = restauranteRepository.save(restaurante1);
         System.out.println(restaurante1);
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.util.Optional;
+
 public class BuscaFormaPagamentoMain {
 
     public static void main(String[] args) {
@@ -17,8 +19,8 @@ public class BuscaFormaPagamentoMain {
 
         FormaPagamentoRepository formaPagamentoRepository = configurableApplicationContext.getBean(FormaPagamentoRepository.class);
 
-        FormaPagamento formaPagamento = formaPagamentoRepository.buscar(1L);
+        Optional<FormaPagamento> formaPagamentoOpt = formaPagamentoRepository.findById(1L);
 
-        System.out.println(formaPagamento);
+        System.out.println(formaPagamentoOpt.get());
     }
 }

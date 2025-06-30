@@ -20,6 +20,6 @@ public class AlteracaoFormaPagamentoMain {
         formaPagamento.setId(1L);
         formaPagamento.setDescricao("Ethereum");
 
-        formaPagamentoRepository.salvar(formaPagamento);
+        formaPagamentoRepository.save(formaPagamento);
     }
 }

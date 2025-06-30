@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class CadastroEstadoService {
@@ -22,22 +23,22 @@ public class CadastroEstadoService {
     }
 
     public Estado atualizar(Long estadoId, Estado estado) {
-        Estado estadoEntity = estadoRepository.buscar(estadoId);
-        if (estadoEntity == null) {
+        Optional<Estado> estadoEntityOpt = estadoRepository.findById(estadoId);
+        if (estadoEntityOpt.isEmpty()) {
             throw new EntidadeNaoEncontradaException(String.format("O estado de código %d não foi encontrado no sistema.", estadoId));
         }
 
-        BeanUtils.copyProperties(estado, estadoEntity, "id");
-        return estadoRepository.salvar(estadoEntity);
+        BeanUtils.copyProperties(estado, estadoEntityOpt.get(), "id");
+        return estadoRepository.save(estadoEntityOpt.get());
     }
 
     public Estado salvar(Estado estado) {
-        return estadoRepository.salvar(estado);
+        return estadoRepository.save(estado);
     }
 
     public void remover(Long estadoId) {
         try {
-            estadoRepository.remover(estadoId);
+            estadoRepository.deleteById(estadoId);
         } catch(EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaException(String.format("Estado de código %d não encontrado.", estadoId));
         } catch(DataIntegrityViolationException e) {

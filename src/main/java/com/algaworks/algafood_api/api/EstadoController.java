@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/estados")
@@ -29,13 +30,13 @@ public class EstadoController {
 
     @GetMapping
     public List<Estado> listar() {
-        return repository.listar();
+        return repository.findAll();
     }
 
     @GetMapping("/{estadoId}")
     public ResponseEntity<?> buscar(@PathVariable Long estadoId) {
         try {
-            Estado estado = repository.buscar(estadoId);
+            Optional<Estado> estado = repository.findById(estadoId);
             return ResponseEntity.ok(estado);
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity

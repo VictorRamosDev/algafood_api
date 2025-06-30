@@ -20,7 +20,7 @@ public class InclusaoFormaPagamentoMain {
         FormaPagamento formaPagamento1 = new FormaPagamento();
         formaPagamento1.setDescricao("Bitcoin");
 
-        formaPagamento1 = formaPagamentoRepository.salvar(formaPagamento1);
+        formaPagamento1 = formaPagamentoRepository.save(formaPagamento1);
 
         System.out.println(formaPagamento1);
     }

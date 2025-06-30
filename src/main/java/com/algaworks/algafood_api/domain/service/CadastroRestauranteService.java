@@ -31,28 +31,28 @@ public class CadastroRestauranteService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Não existe cadastro de cozinha de código %d.", cozinhaId)));
         restaurante.setCozinha(cozinha);
 
-        return restauranteRepository.salvar(restaurante);
+        return restauranteRepository.save(restaurante);
     }
 
     public Restaurante atualizar(Long restauranteId, Restaurante restaurante) {
-        Restaurante restauranteEntity = restauranteRepository.buscar(restauranteId);
+        Optional<Restaurante> restauranteEntityOpt = restauranteRepository.findById(restauranteId);
 
-        if (restauranteEntity == null) {
+        if (restauranteEntityOpt.isEmpty()) {
             throw new EntidadeNaoEncontradaException(String.format("O restaurante de código %d não foi encontrado.", restauranteId));
         }
 
-        Optional<Cozinha> cozinha = cozinhaRepository.findById(restaurante.getCozinha().getId());
-        if (cozinha.isEmpty()) {
+        Optional<Cozinha> cozinhaOpt = cozinhaRepository.findById(restaurante.getCozinha().getId());
+        if (cozinhaOpt.isEmpty()) {
             throw new EntidadeNaoEncontradaException(String.format("A cozinha de código %d não existe no sistema.", restaurante.getCozinha().getId()));
         }
 
-        BeanUtils.copyProperties(restaurante, restauranteEntity, "id");
-        return restauranteRepository.salvar(restauranteEntity);
+        BeanUtils.copyProperties(restaurante, restauranteEntityOpt.get(), "id");
+        return restauranteRepository.save(restauranteEntityOpt.get());
     }
 
     public void remover(Long restauranteId) {
         try {
-            restauranteRepository.remover(restauranteId);
+            restauranteRepository.deleteById(restauranteId);
         } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaException(String.format("O restaurante de código %d não foi encontrado.", restauranteId));
         }

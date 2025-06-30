@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -34,17 +35,14 @@ public class RestauranteController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Restaurante> listar() {
-        return restauranteRepository.listar();
+        return restauranteRepository.findAll();
     }
 
     @GetMapping("/{restauranteId}")
     public ResponseEntity<Restaurante> buscar(@PathVariable Long restauranteId) {
-        Restaurante restaurante = restauranteRepository.buscar(restauranteId);
+        Optional<Restaurante> restauranteOpt = restauranteRepository.findById(restauranteId);
 
-        if (restaurante == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(restaurante);
+        return restauranteOpt.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -75,14 +73,14 @@ public class RestauranteController {
             @PathVariable Long restauranteId,
             @RequestBody Map<String, Object> campos
     ) {
-        Restaurante restauranteAtual = restauranteRepository.buscar(restauranteId);
-        if (restauranteAtual == null) {
+        Optional<Restaurante> restauranteAtualOpt = restauranteRepository.findById(restauranteId);
+        if (restauranteAtualOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        merge(campos, restauranteAtual);
+        merge(campos, restauranteAtualOpt.get());
 
-        return atualizar(restauranteId, restauranteAtual);
+        return atualizar(restauranteId, restauranteAtualOpt.get());
     }
 
     private void merge(Map<String, Object> campos, Restaurante restauranteDestino) {

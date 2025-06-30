@@ -1,6 +1,5 @@
 package com.algaworks.algafood_api.api;
 
-import com.algaworks.algafood_api.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood_api.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood_api.domain.model.Cidade;
 import com.algaworks.algafood_api.domain.repository.CidadeRepository;
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cidades")
@@ -28,18 +28,14 @@ public class CidadeController {
 
     @GetMapping
     public List<Cidade> listar() {
-        return cidadeRepository.listar();
+        return cidadeRepository.findAll();
     }
 
     @GetMapping("/{cidadeId}")
     public ResponseEntity<Cidade> buscar(@PathVariable Long cidadeId) {
-        Cidade cidade = cidadeRepository.buscar(cidadeId);
+        Optional<Cidade> cidadeOpt = cidadeRepository.findById(cidadeId);
 
-        if (cidade == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(cidade);
+        return cidadeOpt.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{cidadeId}")
