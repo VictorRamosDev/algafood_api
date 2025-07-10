@@ -29,4 +29,9 @@ public class TestController {
     public int buscaRestaurantesPorCozinha(Long cozinhaId) {
         return restauranteRepository.countByCozinhaId(cozinhaId);
     }
+
+    @GetMapping("/restaurantes/consultar-por-nome")
+    public List<Restaurante> buscaRestaurantesPorNome(Long cozinhaId, String nome) {
+        return restauranteRepository.consultarPorNome(nome, cozinhaId);
+    }
 }
