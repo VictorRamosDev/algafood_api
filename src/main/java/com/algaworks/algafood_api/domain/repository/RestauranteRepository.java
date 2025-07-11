@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RestauranteRepository extends JpaRepository<Restaurante, Long> {
+public interface RestauranteRepository extends JpaRepository<Restaurante, Long>, RestauranteRepositoryCustom {
 
     List<Restaurante> findTop2ByNomeContaining(String nome);
 
@@ -16,4 +16,5 @@ public interface RestauranteRepository extends JpaRepository<Restaurante, Long> 
     List<Restaurante> consultarPorNome(String nome, @Param("id") Long cozinhaId);
 
     int countByCozinhaId(Long cozinhaId);
+
 }
