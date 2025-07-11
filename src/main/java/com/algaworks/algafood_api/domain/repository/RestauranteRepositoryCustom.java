@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface RestauranteRepositoryCustom {
 
-    List<Restaurante> find(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal);
+    List<Restaurante> findByJpql(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal);
+
+    List<Restaurante> findByCriteria(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal);
 
 }
