@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -62,4 +63,26 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryCustom {
         TypedQuery<Restaurante> query = entityManager.createQuery(criteriaQuery);
         return query.getResultList();
     }
+
+    public List<Restaurante> findByCriteriaOptimized(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Restaurante> criteria = builder.createQuery(Restaurante.class);
+        Root<Restaurante> root = criteria.from(Restaurante.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+        if (StringUtils.hasLength(nome)) {
+            predicates.add(builder.like(root.get("nome"), "%" + nome + "%"));
+        }
+        if (taxaInicial != null) {
+            predicates.add(builder.greaterThanOrEqualTo(root.get("taxaFrete"), taxaInicial));
+        }
+        if (taxaFinal != null) {
+            predicates.add(builder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFinal));
+        }
+
+        criteria.where(predicates.toArray(new Predicate[0]));
+        TypedQuery<Restaurante> query = entityManager.createQuery(criteria);
+        return query.getResultList();
+    }
+
 }
