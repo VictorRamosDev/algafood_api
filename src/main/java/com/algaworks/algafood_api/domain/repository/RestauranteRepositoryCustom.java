@@ -11,4 +11,6 @@ public interface RestauranteRepositoryCustom {
 
     List<Restaurante> findByCriteria(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal);
 
+    List<Restaurante> findByCriteriaOptimized(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal);
+
 }

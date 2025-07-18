@@ -38,6 +38,6 @@ public class TestController {
 
     @GetMapping("/restaurantes/consultar-por-nome-taxa-frete")
     public List<Restaurante> buscaRestaurantesPorNomeTaxaFrete(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal) {
-        return restauranteRepository.findByCriteria(nome, taxaInicial, taxaFinal);
+        return restauranteRepository.findByCriteriaOptimized(nome, taxaInicial, taxaFinal);
     }
 }

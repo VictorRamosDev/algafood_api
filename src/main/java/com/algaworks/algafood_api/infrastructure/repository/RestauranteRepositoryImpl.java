@@ -64,6 +64,7 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryCustom {
         return query.getResultList();
     }
 
+    @Override
     public List<Restaurante> findByCriteriaOptimized(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Restaurante> criteria = builder.createQuery(Restaurante.class);
