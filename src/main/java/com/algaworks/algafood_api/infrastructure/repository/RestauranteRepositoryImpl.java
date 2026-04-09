@@ -4,6 +4,7 @@ import com.algaworks.algafood_api.domain.model.Restaurante;
 import com.algaworks.algafood_api.domain.repository.RestauranteRepository;
 import com.algaworks.algafood_api.domain.repository.RestauranteRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -28,6 +29,7 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryCustom {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Lazy
     @Autowired
     private RestauranteRepository restauranteRepository;
 
