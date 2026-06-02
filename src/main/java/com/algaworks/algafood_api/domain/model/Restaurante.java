@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,5 +30,13 @@ public class Restaurante {
     @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false) // Annotation par setar nome da coluna (chave estrangeira) na tabela Restaurante. É opcional, pois o padrão é "<nome da entidade>_id"
     private Cozinha cozinha;
+
+    @ManyToMany
+    @JoinTable(
+            name = "restaurante_forma_pagamento",
+            joinColumns = @JoinColumn(name = "restaurante_id"),
+            inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id")
+    )
+    private List<FormaPagamento> formasPagamento;
 
 }
