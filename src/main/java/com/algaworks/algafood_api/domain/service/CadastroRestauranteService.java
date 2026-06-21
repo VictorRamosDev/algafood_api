@@ -46,7 +46,7 @@ public class CadastroRestauranteService {
             throw new EntidadeNaoEncontradaException(String.format("A cozinha de código %d não existe no sistema.", restaurante.getCozinha().getId()));
         }
 
-        BeanUtils.copyProperties(restaurante, restauranteEntityOpt.get(), "id");
+        BeanUtils.copyProperties(restaurante, restauranteEntityOpt.get(), "id", "formasPagamento");
         return restauranteRepository.save(restauranteEntityOpt.get());
     }
 
