@@ -32,6 +32,9 @@ public class Restaurante {
     @JoinColumn(name = "cozinha_id", nullable = false) // Annotation par setar nome da coluna (chave estrangeira) na tabela Restaurante. É opcional, pois o padrão é "<nome da entidade>_id"
     private Cozinha cozinha;
 
+    @Embedded
+    private Endereco endereco;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
