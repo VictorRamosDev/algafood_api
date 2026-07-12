@@ -58,4 +58,8 @@ public class Restaurante {
     )
     private List<FormaPagamento> formasPagamento;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "restaurante")
+    private List<Produto> produtos;
+
 }
