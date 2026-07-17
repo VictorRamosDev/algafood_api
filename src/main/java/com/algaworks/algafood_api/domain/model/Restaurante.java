@@ -31,8 +31,10 @@ public class Restaurante {
     @Column(name = "taxa_frete",nullable = false) //Opcional: Se o nome do atributo de classe for o mesmo da coluna da tabela
     private BigDecimal taxaFrete;
 
+//    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "cozinha_id", nullable = false) // Annotation par setar nome da coluna (chave estrangeira) na tabela Restaurante. É opcional, pois o padrão é "<nome da entidade>_id"
+//    @JsonIgnoreProperties("hibernateLazyInitializer")
+    @JoinColumn(name = "cozinha_id", nullable = false) // Annotation para setar nome da coluna (chave estrangeira) na tabela Restaurante. É opcional, pois o padrão é "<nome da entidade>_id"
     private Cozinha cozinha;
 
     @JsonIgnore
@@ -49,7 +51,7 @@ public class Restaurante {
     @Column(nullable = false, columnDefinition = "datetime")
     private LocalDateTime dataAtualizacao;
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "restaurante_forma_pagamento",
