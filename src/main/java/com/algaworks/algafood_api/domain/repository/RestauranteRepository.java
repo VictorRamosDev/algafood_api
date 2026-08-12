@@ -12,7 +12,7 @@ import java.util.List;
 public interface RestauranteRepository extends CustomJpaRepository<Restaurante, Long>,
         RestauranteRepositoryCustom, JpaSpecificationExecutor<Restaurante> {
 
-    @Query("from Restaurante r join fetch r.cozinha join fetch r.formasPagamento")
+    @Query("from Restaurante r join fetch r.cozinha")
     List<Restaurante> findAll();
 
     List<Restaurante> findTop2ByNomeContaining(String nome);
