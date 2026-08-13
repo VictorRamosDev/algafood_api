@@ -1,7 +1,5 @@
 package com.algaworks.algafood_api.api;
 
-import com.algaworks.algafood_api.domain.exception.EntidadeEmUsoException;
-import com.algaworks.algafood_api.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood_api.domain.model.Cozinha;
 import com.algaworks.algafood_api.domain.repository.CozinhaRepository;
 import com.algaworks.algafood_api.domain.service.CadastroCozinhaService;
@@ -31,7 +29,7 @@ public class CozinhaController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Cozinha> listarJson() {
+    public List<Cozinha> listar() {
         return repository.findAll();
     }
 
@@ -64,16 +62,22 @@ public class CozinhaController {
         return ResponseEntity.notFound().build();
     }
 
+//    @DeleteMapping("/{cozinhaId}")
+//    public ResponseEntity<?> deletar(@PathVariable Long cozinhaId) {
+//        try {
+//            cadastroCozinhaService.remover(cozinhaId);
+//            return ResponseEntity.noContent().build();
+//        } catch (EntidadeEmUsoException e) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+//        } catch (EntidadeNaoEncontradaException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+//        }
+//    }
+
     @DeleteMapping("/{cozinhaId}")
-    public ResponseEntity<?> deletar(@PathVariable Long cozinhaId) {
-        try {
-            cadastroCozinhaService.remover(cozinhaId);
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long cozinhaId) {
+        cadastroCozinhaService.remover(cozinhaId);
     }
 
 }
