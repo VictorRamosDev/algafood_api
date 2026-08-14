@@ -10,11 +10,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class CadastroEstadoService {
 
+    public static final String MSG_ESTADO_NAO_ENCONTRADO = "Estado de código %d não encontrado.";
+    public static final String MSG_ESTADO_EM_USO = "O Estado com código %d está sendo utilizado no sistema.";
     private final EstadoRepository estadoRepository;
 
     @Autowired
@@ -22,14 +22,11 @@ public class CadastroEstadoService {
         this.estadoRepository = estadoRepository;
     }
 
-    public Estado atualizar(Long estadoId, Estado estado) {
-        Optional<Estado> estadoEntityOpt = estadoRepository.findById(estadoId);
-        if (estadoEntityOpt.isEmpty()) {
-            throw new EntidadeNaoEncontradaException(String.format("O estado de código %d não foi encontrado no sistema.", estadoId));
-        }
+    public Estado atualizar(Long estadoId, Estado request) {
+        Estado estado = buscarOuFalhar(estadoId);
 
-        BeanUtils.copyProperties(estado, estadoEntityOpt.get(), "id");
-        return estadoRepository.save(estadoEntityOpt.get());
+        BeanUtils.copyProperties(request, estado, "id");
+        return estadoRepository.save(estado);
     }
 
     public Estado salvar(Estado estado) {
@@ -39,10 +36,14 @@ public class CadastroEstadoService {
     public void remover(Long estadoId) {
         try {
             estadoRepository.deleteById(estadoId);
-        } catch(EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(String.format("Estado de código %d não encontrado.", estadoId));
-        } catch(DataIntegrityViolationException e) {
-            throw new EntidadeEmUsoException(String.format("O Estado com código %d está sendo utilizado no sistema.", estadoId));
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntidadeNaoEncontradaException(String.format(MSG_ESTADO_NAO_ENCONTRADO, estadoId));
+        } catch (DataIntegrityViolationException e) {
+            throw new EntidadeEmUsoException(String.format(MSG_ESTADO_EM_USO, estadoId));
         }
+    }
+
+    public Estado buscarOuFalhar(Long estadoId) {
+        return estadoRepository.findById(estadoId).orElseThrow(() -> new EntidadeNaoEncontradaException(MSG_ESTADO_NAO_ENCONTRADO));
     }
 }

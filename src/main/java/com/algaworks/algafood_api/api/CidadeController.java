@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cidades")
@@ -32,20 +31,13 @@ public class CidadeController {
     }
 
     @GetMapping("/{cidadeId}")
-    public ResponseEntity<Cidade> buscar(@PathVariable Long cidadeId) {
-        Optional<Cidade> cidadeOpt = cidadeRepository.findById(cidadeId);
-
-        return cidadeOpt.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public Cidade buscar(@PathVariable Long cidadeId) {
+        return cadastroCidadeService.buscarOuFalhar(cidadeId);
     }
 
     @PutMapping("/{cidadeId}")
-    public ResponseEntity<?> atualizar(@PathVariable Long cidadeId, @RequestBody Cidade request) {
-        try {
-            Cidade cidade = cadastroCidadeService.atualizar(cidadeId, request);
-            return ResponseEntity.ok(cidade);
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public Cidade atualizar(@PathVariable Long cidadeId, @RequestBody Cidade request) {
+        return cadastroCidadeService.atualizar(cidadeId, request);
     }
 
     @PostMapping
@@ -59,13 +51,8 @@ public class CidadeController {
     }
 
     @DeleteMapping("/{cidadeId}")
-    public ResponseEntity<?> remover(@PathVariable Long cidadeId) {
-        try {
-            cadastroCidadeService.remover(cidadeId);
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public void remover(@PathVariable Long cidadeId) {
+        cadastroCidadeService.remover(cidadeId);
     }
 
 }
