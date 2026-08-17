@@ -1,6 +1,7 @@
 package com.algaworks.algafood_api.domain.service;
 
 import com.algaworks.algafood_api.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood_api.domain.exception.NegocioException;
 import com.algaworks.algafood_api.domain.model.Cidade;
 import com.algaworks.algafood_api.domain.model.Estado;
 import com.algaworks.algafood_api.domain.repository.CidadeRepository;
@@ -28,7 +29,7 @@ public class CadastroCidadeService {
         try {
             return ResponseEntity.ok(this.salvar(cidade));
         } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest().build();
+            throw new NegocioException(e.getMessage(), e);
         }
     }
 
