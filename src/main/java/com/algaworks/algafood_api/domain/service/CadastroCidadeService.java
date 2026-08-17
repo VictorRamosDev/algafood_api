@@ -6,6 +6,7 @@ import com.algaworks.algafood_api.domain.model.Estado;
 import com.algaworks.algafood_api.domain.repository.CidadeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,11 +21,15 @@ public class CadastroCidadeService {
         this.cadastroEstadoService = cadastroEstadoService;
     }
 
-    public Cidade atualizar(Long cidadeId, Cidade request) {
+    public ResponseEntity<?> atualizar(Long cidadeId, Cidade request) {
         Cidade cidade = buscarOuFalhar(cidadeId);
-
         BeanUtils.copyProperties(request, cidade, "id");
-        return cidadeRepository.save(cidade);
+
+        try {
+            return ResponseEntity.ok(this.salvar(cidade));
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     public Cidade salvar(Cidade request) {
@@ -44,6 +49,8 @@ public class CadastroCidadeService {
 
     public Cidade buscarOuFalhar(Long cidadeId) {
         return cidadeRepository.findById(cidadeId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(MSG_CIDADE_NAO_ENCONTRADA));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(
+                        String.format(MSG_CIDADE_NAO_ENCONTRADA, cidadeId)
+                ));
     }
 }
