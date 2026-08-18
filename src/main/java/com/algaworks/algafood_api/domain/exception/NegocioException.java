@@ -1,12 +1,17 @@
 package com.algaworks.algafood_api.domain.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-public class NegocioException extends ResponseStatusException {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class NegocioException extends RuntimeException {
 
-    public NegocioException(String message, Exception e) {
-        super(HttpStatus.BAD_REQUEST, message, e);
+    public NegocioException(String message) {
+        super(message);
+    }
+
+    public NegocioException(String message, Throwable e) {
+        super(message, e);
     }
 
 }
