@@ -1,7 +1,8 @@
 package com.algaworks.algafood_api.domain.service;
 
-import com.algaworks.algafood_api.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood_api.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood_api.domain.exception.NegocioException;
+import com.algaworks.algafood_api.domain.exception.RestauranteNaoEncontradaException;
 import com.algaworks.algafood_api.domain.model.Cozinha;
 import com.algaworks.algafood_api.domain.model.Restaurante;
 import com.algaworks.algafood_api.domain.repository.RestauranteRepository;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CadastroRestauranteService {
 
-    public static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "O restaurante de código %d não foi encontrado.";
     private final RestauranteRepository restauranteRepository;
     private final CadastroCozinhaService cadastroCozinhaService;
 
@@ -38,7 +38,7 @@ public class CadastroRestauranteService {
         try {
             Cozinha cozinha = cadastroCozinhaService.buscarOuFalhar(request.getCozinha().getId());
             restaurante.setCozinha(cozinha);
-        } catch (EntidadeNaoEncontradaException e) {
+        } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
 
@@ -50,12 +50,12 @@ public class CadastroRestauranteService {
         try {
             restauranteRepository.deleteById(restauranteId);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, restauranteId));
+            throw new RestauranteNaoEncontradaException(restauranteId);
         }
     }
 
     public Restaurante buscarOuFalhar(Long restauranteId) {
         return restauranteRepository.findById(restauranteId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, restauranteId)));
+                .orElseThrow(() -> new RestauranteNaoEncontradaException(restauranteId));
     }
 }
