@@ -1,6 +1,7 @@
 package com.algaworks.algafood_api.domain.service;
 
 import com.algaworks.algafood_api.domain.exception.CozinhaNaoEncontradaException;
+import com.algaworks.algafood_api.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood_api.domain.exception.NegocioException;
 import com.algaworks.algafood_api.domain.exception.RestauranteNaoEncontradaException;
 import com.algaworks.algafood_api.domain.model.Cozinha;
@@ -8,12 +9,14 @@ import com.algaworks.algafood_api.domain.model.Restaurante;
 import com.algaworks.algafood_api.domain.repository.RestauranteRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CadastroRestauranteService {
 
+    public static final String MSG_RESTAURANTE_EM_USO = "O restaurante com código %d está sendo utilizado no sistema.";
     private final RestauranteRepository restauranteRepository;
     private final CadastroCozinhaService cadastroCozinhaService;
 
@@ -51,6 +54,8 @@ public class CadastroRestauranteService {
             restauranteRepository.deleteById(restauranteId);
         } catch (EmptyResultDataAccessException e) {
             throw new RestauranteNaoEncontradaException(restauranteId);
+        } catch (DataIntegrityViolationException e) {
+            throw new EntidadeEmUsoException(String.format(MSG_RESTAURANTE_EM_USO, restauranteId));
         }
     }
 
