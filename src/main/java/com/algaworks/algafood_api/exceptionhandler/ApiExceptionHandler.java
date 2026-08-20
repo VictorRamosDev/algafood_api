@@ -1,5 +1,6 @@
 package com.algaworks.algafood_api.exceptionhandler;
 
+import com.algaworks.algafood_api.domain.enums.ProblemType;
 import com.algaworks.algafood_api.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood_api.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood_api.domain.exception.NegocioException;
@@ -11,19 +12,25 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
-
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<?> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException e, WebRequest request) {
-//        Problema problema = Problema.builder()
-//                .message(e.getMessage())
-//                .dateTime(LocalDateTime.now())
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ProblemType problemType = ProblemType.ENTIDADE_NAO_ENCONTRADA;
+        String detail = e.getMessage();
+
+        Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+//        Problem problem = Problem.builder()
+//                .status(status.value())
+//                .title(status.getReasonPhrase())
+//                .detail(e.getMessage())
+//                .type("https://api.algafood/entidade-nao-encontrada")
 //                .build();
 
-        return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+        return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(EntidadeEmUsoException.class)
@@ -67,17 +74,25 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         if (body == null) {
-            body = Problema.builder()
-                    .message(status.getReasonPhrase())
-                    .dateTime(LocalDateTime.now())
+            body = Problem.builder()
+                    .title(status.getReasonPhrase())
+                    .status(status.value())
                     .build();
         } else if (body instanceof String) {
-            body = Problema.builder()
-                    .message((String) body)
-                    .dateTime(LocalDateTime.now())
+            body = Problem.builder()
+                    .title((String) body)
+                    .status(status.value())
                     .build();
         }
 
         return super.handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
+        return Problem.builder()
+                .title(problemType.getTitle())
+                .type(problemType.getUri())
+                .status(status.value())
+                .detail(detail);
     }
 }
