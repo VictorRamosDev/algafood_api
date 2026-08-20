@@ -23,34 +23,29 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         Problem problem = createProblemBuilder(status, problemType, detail).build();
 
-//        Problem problem = Problem.builder()
-//                .status(status.value())
-//                .title(status.getReasonPhrase())
-//                .detail(e.getMessage())
-//                .type("https://api.algafood/entidade-nao-encontrada")
-//                .build();
-
         return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(EntidadeEmUsoException.class)
     public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoException e, WebRequest request) {
-//        Problema problema = Problema.builder()
-//                .message(e.getMessage())
-//                .dateTime(LocalDateTime.now())
-//                .build();
+        HttpStatus status = HttpStatus.CONFLICT;
+        ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
+        String detail = e.getMessage();
 
-        return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+        Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+        return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(NegocioException.class)
     public ResponseEntity<?> handleNegocioException(NegocioException e, WebRequest request) {
-//        Problema problema = Problema.builder()
-//                .message(e.getMessage())
-//                .dateTime(LocalDateTime.now())
-//                .build();
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ProblemType problemType = ProblemType.ERRO_NEGOCIO;
+        String detail = e.getMessage();
 
-        return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+        return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
     }
 
 //    @ExceptionHandler(HttpMessageNotReadableException.class)
