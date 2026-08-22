@@ -100,6 +100,23 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
     }
 
+//    handleIllegalArgumentException alternativa para tratamento de IllegalArgumentException
+//    Mas está sendo tratada no controller de Restaurante no http PATCH (prefiro a implementação abaixo,
+//    mas na video-aula está implementado da forma anterior) instanciando um novo HttpMessageNotReadable.
+//    @ExceptionHandler(IllegalArgumentException.class)
+//    public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e, WebRequest request) {
+//        Throwable rootCause = ExceptionUtils.getRootCause(e);
+//        String path = joinPath((PropertyBindingException) rootCause);
+//
+//        HttpStatus status = HttpStatus.BAD_REQUEST;
+//        ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
+//        String detail = String.format("A propriedade '%s' não é reconhecida pelo sistema. Favor revisar o corpo da requisição.", path);
+//
+//        Problem problem = createProblemBuilder(status, problemType, detail).build();
+//
+//        return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
+//    }
+
 //    @ExceptionHandler(HttpMessageNotReadableException.class)
 //    public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
 //        Problema problema = Problema.builder()
