@@ -14,6 +14,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
@@ -51,7 +52,12 @@ public class RestauranteController {
 
     @GetMapping("/{restauranteId}")
     public Restaurante buscar(@PathVariable Long restauranteId) {
-        return cadastroRestauranteService.buscarOuFalhar(restauranteId);
+        try {
+            return cadastroRestauranteService.buscarOuFalhar(restauranteId);
+        } catch (MethodArgumentTypeMismatchException e) {
+            Throwable rootCause = ExceptionUtils.getRootCause(e);
+            return null;
+        }
     }
 
     @PostMapping
