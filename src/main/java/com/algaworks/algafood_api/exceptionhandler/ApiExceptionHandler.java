@@ -26,14 +26,18 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro interno inesperado no sistema. " +
+            "Tente novamente e se o problema persistir, entre em contato com o administrador do sistema.";
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleUncaught(Exception e, WebRequest request) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
-        String detail = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se o " +
-                "problema persistir, entre em contato com o administrador do sistema.";
+        String detail = MSG_ERRO_GENERICA_USUARIO_FINAL;
 
-        Problem problem = createProblemBuilder(status, problemType, detail).build();
+        Problem problem = createProblemBuilder(status, problemType, detail)
+                .userMessage(detail)
+                .build();
 
         e.printStackTrace();
         return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
@@ -71,7 +75,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
         String detail = String.format("A propriedade '%s' não é reconhecida pelo sistema. Favor revisar o corpo da requisição.", path);
-        Problem problem = createProblemBuilder(status, problemType, detail).build();
+        Problem problem = createProblemBuilder(status, problemType, detail)
+                .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+                .build();
 
         return handleExceptionInternal(e, problem, httpHeaders, status, request);
     }
@@ -87,14 +93,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 e.getTargetType().getSimpleName()
         );
 
-        Problem problem = createProblemBuilder(status, problemType, detail).build();
+        Problem problem = createProblemBuilder(status, problemType, detail)
+                .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+                .build();
 
         return handleExceptionInternal(e, problem, httpHeaders, status, request);
     }
 
     @Override
     protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
-//        Throwable rootCause = ExceptionUtils.getRootCause(e);
         if (e instanceof MethodArgumentTypeMismatchException) {
             return handleMethodArgumentTypeMismatch((MethodArgumentTypeMismatchException) e, headers, status, request);
         }
