@@ -9,8 +9,10 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,8 +38,10 @@ public class Restaurante {
     private BigDecimal taxaFrete;
 
 //    @JsonIgnore
-    @ManyToOne
 //    @JsonIgnoreProperties("hibernateLazyInitializer")
+    @Valid
+    @NotNull
+    @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false) // Annotation para setar nome da coluna (chave estrangeira) na tabela Restaurante. É opcional, pois o padrão é "<nome da entidade>_id"
     private Cozinha cozinha;
 
