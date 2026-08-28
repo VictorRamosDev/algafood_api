@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,13 @@ import java.util.List;
 @Entity
 public class Cozinha {
 
-    @NotNull
+    @NotNull(groups = Groups.CadastroRestaurante.class)
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(groups = Groups.CadastroCozinha.class)
     @Column(nullable = false)
     private String nome;
 
