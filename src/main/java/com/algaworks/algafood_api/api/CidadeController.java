@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -38,7 +39,7 @@ public class CidadeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> salvar(@RequestBody Cidade request) {
+    public ResponseEntity<?> salvar(@RequestBody @Valid Cidade request) {
         try {
             Cidade cidade = cadastroCidadeService.salvar(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(cidade);
@@ -48,7 +49,7 @@ public class CidadeController {
     }
 
     @PutMapping(value = "/{cidadeId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> atualizar(@PathVariable Long cidadeId, @RequestBody Cidade request) {
+    public ResponseEntity<?> atualizar(@PathVariable Long cidadeId, @RequestBody @Valid Cidade request) {
         return cadastroCidadeService.atualizar(cidadeId, request);
     }
 

@@ -27,7 +27,7 @@ public class Cozinha {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(groups = Groups.CadastroCozinha.class)
+    @NotBlank
     @Column(nullable = false)
     private String nome;
 
