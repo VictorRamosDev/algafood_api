@@ -35,6 +35,7 @@ public class Restaurante {
     @Column(nullable = false)
     private String nome;
 
+    @NotNull
     @DecimalMin(value = "1")
     @Column(name = "taxa_frete",nullable = false) //Opcional: Se o nome do atributo de classe for o mesmo da coluna da tabela
     private BigDecimal taxaFrete;
