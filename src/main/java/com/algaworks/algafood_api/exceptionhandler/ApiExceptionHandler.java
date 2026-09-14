@@ -89,9 +89,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         Throwable rootCause = ExceptionUtils.getRootCause(e);
 
         if (rootCause instanceof PropertyBindingException) {
-            return handlePropertyBindingException((PropertyBindingException) rootCause, new HttpHeaders(), status, request);
+            return handlePropertyBindingException((PropertyBindingException) rootCause, headers, status, request);
         } else if (rootCause instanceof InvalidFormatException) {
-            return handleInvalidFormatException((InvalidFormatException) rootCause, new HttpHeaders(), status, request);
+            return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status, request);
         }
 
         ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
@@ -99,7 +99,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         Problem problem = createProblemBuilder(status, problemType, detail, MSG_ERRO_GENERICA_USUARIO_FINAL).build();
 
-        return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
+        return handleExceptionInternal(e, problem, headers, status, request);
     }
 
     private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException e, HttpHeaders httpHeaders, HttpStatus status, WebRequest request) {
