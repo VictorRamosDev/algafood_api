@@ -1,6 +1,7 @@
 package com.algaworks.algafood_api.domain.model;
 
 import com.algaworks.algafood_api.core.validation.Groups;
+import com.algaworks.algafood_api.core.validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,7 +12,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
@@ -37,7 +37,7 @@ public class Restaurante {
     private String nome;
 
     @NotNull
-    @DecimalMin(value = "1")
+    @TaxaFrete
     @Column(name = "taxa_frete",nullable = false) //Opcional: Se o nome do atributo de classe for o mesmo da coluna da tabela
     private BigDecimal taxaFrete;
 
