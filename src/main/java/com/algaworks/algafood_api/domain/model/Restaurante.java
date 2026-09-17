@@ -1,5 +1,6 @@
 package com.algaworks.algafood_api.domain.model;
 
+import com.algaworks.algafood_api.core.validation.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,7 +37,7 @@ public class Restaurante {
     private String nome;
 
     @NotNull
-    @DecimalMin(value = "1", message = "{TaxaFrete.invalida}")
+    @DecimalMin(value = "1")
     @Column(name = "taxa_frete",nullable = false) //Opcional: Se o nome do atributo de classe for o mesmo da coluna da tabela
     private BigDecimal taxaFrete;
 
