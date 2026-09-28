@@ -2,6 +2,7 @@ package com.algaworks.algafood_api.api;
 
 import com.algaworks.algafood_api.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood_api.domain.exception.NegocioException;
+import com.algaworks.algafood_api.domain.exception.ValidacaoException;
 import com.algaworks.algafood_api.domain.model.Restaurante;
 import com.algaworks.algafood_api.domain.repository.RestauranteRepository;
 import com.algaworks.algafood_api.domain.service.CadastroRestauranteService;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -28,14 +31,17 @@ public class RestauranteController {
 
     private final RestauranteRepository restauranteRepository;
     private final CadastroRestauranteService cadastroRestauranteService;
+    private final SmartValidator validator;
 
     @Autowired
     public RestauranteController(
             RestauranteRepository restauranteRepository,
-            CadastroRestauranteService cadastroRestauranteService)
-    {
+            CadastroRestauranteService cadastroRestauranteService,
+            SmartValidator validator
+    ) {
         this.restauranteRepository = restauranteRepository;
         this.cadastroRestauranteService = cadastroRestauranteService;
+        this.validator = validator;
     }
 
     @GetMapping
@@ -91,8 +97,18 @@ public class RestauranteController {
     ) {
         Restaurante restaurante = cadastroRestauranteService.buscarOuFalhar(restauranteId);
         merge(campos, restaurante, request);
+        validate(restaurante, "restaurante");
 
         return cadastroRestauranteService.atualizar(restauranteId, restaurante);
+    }
+
+    private void validate(Restaurante restaurante, String objectName) {
+        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
+        validator.validate(restaurante, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            throw new ValidacaoException(bindingResult);
+        }
     }
 
     private void merge(Map<String, Object> campos, Restaurante restauranteDestino, HttpServletRequest request) {
@@ -108,12 +124,12 @@ public class RestauranteController {
                 Field field = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
                 if (field != null) {
                     field.setAccessible(true);
+
+                    Object novoValor = ReflectionUtils.getField(field, restauranteRequest);
+                    System.out.println(nomePropriedade + " = " + valorPropriedade + " = " + novoValor);
+
+                    ReflectionUtils.setField(field, restauranteDestino, novoValor);
                 }
-
-                Object novoValor = ReflectionUtils.getField(field, restauranteRequest);
-                System.out.println(nomePropriedade + " = " + valorPropriedade + " = " + novoValor);
-
-                ReflectionUtils.setField(field, restauranteDestino, novoValor);
             });
         } catch (IllegalArgumentException e) {
             Throwable rootCause = ExceptionUtils.getRootCause(e);
