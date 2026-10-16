@@ -15,7 +15,7 @@ import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;
 
 @SpringBootTest
-class CadastroCozinhaIntegrationTests {
+class CadastroCozinhaIT {
 
 	@Autowired
 	private CadastroCozinhaService cadastroCozinhaService;
