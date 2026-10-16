@@ -33,9 +33,11 @@ class CadastroCozinhaIntegrationTests {
 	public void shouldLancarViolationExceptionAoCadastrarCozinhaSemNome() {
 		Cozinha novaCozinha = new Cozinha();
 
-		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+		ConstraintViolationException erroEsperado = Assertions.assertThrows(ConstraintViolationException.class, () -> {
 			cadastroCozinhaService.salvar(novaCozinha);
 		});
+
+		Assertions.assertNotNull(erroEsperado);
 	}
 
 }
