@@ -14,6 +14,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
+import static io.restassured.RestAssured.given;
+
 @TestPropertySource("/application-test.properties")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CadastroCozinhaIT {
@@ -39,7 +41,7 @@ class CadastroCozinhaIT {
 
 	@Test
 	public void shouldRetornarStatus200_WhenConsultarCozinhas() {
-		RestAssured.given()
+		given()
 				.accept(ContentType.JSON)
 			.when()
 				.get()
@@ -49,7 +51,7 @@ class CadastroCozinhaIT {
 
 	@Test
 	public void shouldConter2Cozinhas_WhenConsultarCozinhas() {
-		RestAssured.given()
+		given()
 				.accept(ContentType.JSON)
 			.when()
 				.get()
@@ -61,7 +63,7 @@ class CadastroCozinhaIT {
 
 	@Test
 	public void shouldRetornarStatus201_WhenCadastrarCozinha() {
-		RestAssured.given()
+		given()
 				.body("{ \"nome\": \"Chinesa\" }")
 				.contentType(ContentType.JSON)
 				.accept(ContentType.JSON)
@@ -69,6 +71,29 @@ class CadastroCozinhaIT {
 				.post()
 			.then()
 				.statusCode(HttpStatus.CREATED.value());
+	}
+
+	@Test
+	public void shouldRetornarRespostaEStatusCorretos_WhenConsultarCozinhaExistente() {
+		given()
+				.pathParams("cozinhaId", 2)
+				.accept(ContentType.JSON)
+		.when()
+				.get("/{cozinhaId}")
+		.then()
+				.statusCode(HttpStatus.OK.value())
+				.body("nome", Matchers.equalTo("Americana"));
+	}
+
+	@Test
+	public void shouldRetornarStatus404_WhenConsultarCozinhaInexistente() {
+		given()
+				.pathParams("cozinhaId", 200)
+				.accept(ContentType.JSON)
+				.when()
+				.get("/{cozinhaId}")
+				.then()
+				.statusCode(HttpStatus.NOT_FOUND.value());
 	}
 
 	private void preparaDados() {
