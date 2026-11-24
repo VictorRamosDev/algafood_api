@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CadastroCidadeService {
@@ -22,6 +23,7 @@ public class CadastroCidadeService {
         this.cadastroEstadoService = cadastroEstadoService;
     }
 
+    @Transactional
     public ResponseEntity<?> atualizar(Long cidadeId, Cidade request) {
         Cidade cidade = buscarOuFalhar(cidadeId);
         BeanUtils.copyProperties(request, cidade, "id");
@@ -33,6 +35,7 @@ public class CadastroCidadeService {
         }
     }
 
+    @Transactional
     public Cidade salvar(Cidade request) {
         Estado estado = cadastroEstadoService.buscarOuFalhar(request.getEstado().getId());
         request.setEstado(estado);
@@ -40,6 +43,7 @@ public class CadastroCidadeService {
         return cidadeRepository.save(request);
     }
 
+    @Transactional
     public void remover(Long cidadeId) {
         try {
             cidadeRepository.deleteById(cidadeId);
